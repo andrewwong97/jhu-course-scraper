@@ -1,0 +1,44 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1404\cocoasubrtf340
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\b\fs24 \cf0 \ul \ulc0 Class Scoring Algorithm:\
+
+\b0 \ulnone \
+
+\b Popularity Algorithm:
+\b0 \
+	- Course Evaluation Score\
+	- % open seats from previous years, previous teachers\
+\
+
+\b If required class for said major:\
+
+\b0 	- standing (F, S, J, Senior) [1, 2, 3, 4]\
+	- 1 base score for all major required\
+	- 0.5 base score else\
+	- after you have taken a class, course becomes 0\
+	- 0.5 classes+=0.5, 1.0 classes+=1.0\
+	- score the rest with popularity, seats remaining>0\
+\
+
+\b Sequential sorting for undeclared majors - look into Netflix\
+	
+\b0 - Start at highest level, look at pre-requisites \
+	- BFS\
+\
+
+\b List of problems:\
+
+\b0 	- More efficient scoring algorithm based on if user wants to drop next sequential class
+\b \
+
+\b0 \
+Stuff to look into:\
+Markov chains - sequential predictors\
+Recommendation algorithms\
+Collaborative Filtering\
+Bayesian Belief Networks (BBN)\
+Slope One algorithms (predictive analytics)}
