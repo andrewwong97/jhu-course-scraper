@@ -16,7 +16,8 @@
                             
                                 Whiting School of Engineering 
                                 <input type="image" name="ctl00$content$rptCurrentCriteria$ctl00$rptCurrentCriteriaFilters$ctl01$ibRemoveCriteria" id="ctl00_content_rptCurrentCriteria_ctl00_rptCurrentCriteriaFilters_ctl01_ibRemoveCriteria" src="images/redX.gif" alt="Remove Criteria" border="0"><br>
-                            
+                            id
+
                      </td></tr>   
                     
                        <tr><td valign="top"><strong>Term: </strong></td><td>
