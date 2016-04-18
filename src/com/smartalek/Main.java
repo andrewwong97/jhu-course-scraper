@@ -2,6 +2,8 @@ import com.jaunt.*;
 import com.jaunt.component.*;
 import java.io.*;
 import java.lang.String;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 
 public class Main{
@@ -18,20 +20,22 @@ public class Main{
             form.setCheckBox("ctl00$content$ucSchoolList$rptSchools$ctl03$cbSchool", true); // KSAS
             form.setCheckBox("ctl00$content$ucSchoolList$rptSchools$ctl11$cbSchool", true); // WSE
             form.setTextField("ctl00$content$txtCourseNumber", courseName);
-            form.setSelect("ctl00$content$lbLevel", "Lower Level Undergraduate"); // Lower Level Undergraduate
-            form.setSelect("ctl00$content$lbLevel", "Upper Level Undergraduate"); // Upper Level Undergraduate
-            form.setSelect("ctl00$content$lbTerms", "Spring 2016"); // Current Semester
+            form.setSelect("ctl00$content$lbLevel", "Lower Level Undergraduate");
+            form.setSelect("ctl00$content$lbLevel", "Upper Level Undergraduate");
+            form.setSelect("ctl00$content$lbTerms", "Spring 2016");
             doc.submit("Search");
 
             doc = userAgent.doc; // 2nd page
-            form = doc.getForm(0);
             Elements odd_trs = doc.findEach("<table>").findEach("<td>").findEach("<tr class=odd>");
             Elements even_trs = doc.findEach("<table>").findEach("<td>").findEach("<tr class=even>");
 
-            for (item : odd_trs) {
-                getPrereqs(getID(odd_trs));
+            ArrayList<String> fullData = getID(odd_trs);
+            fullData.addAll(getID(even_trs));
+            
+            for (int i = 0;i<fullData.size();i++) {
+                System.out.print(courseName + ": ");
+                getPrereqs(fullData.get(i));
             }
-
 
         }
         catch(JauntException e){
@@ -39,19 +43,23 @@ public class Main{
         }
     }
 
-    private static String getID(Elements list) {
-        String s = "";
+    /**
+     * @param list list of IDs
+     * @return array of IDs
+     */
+    private static ArrayList getID(Elements list) {
+        ArrayList<String> IDs = new ArrayList<String>();
         for (Element td : list) {
             String idBlock = null;
             try {
                 idBlock = td.findFirst("<td class=icon-none-16-right>").innerHTML();
-            } catch (NotFound notFound) {
-                notFound.printStackTrace();
+            } catch (NotFound e) {
+                e.printStackTrace();
             }
             int place = idBlock.indexOf("blah_");
-            return idBlock.substring(place+5,place+11);
+            IDs.add(idBlock.substring(place+5,place+11));
         }
-        return s;
+        return IDs;
     }
 
     private static void getPrereqs(String id) throws ResponseException, NotFound {
