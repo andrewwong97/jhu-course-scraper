@@ -2,8 +2,8 @@ import com.jaunt.*;
 import com.jaunt.component.*;
 import java.io.*;
 import java.lang.String;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.regex.*;
 
 
 public class Main{
@@ -31,9 +31,10 @@ public class Main{
 
             ArrayList<String> fullData = getID(odd_trs);
             fullData.addAll(getID(even_trs));
-            
+
+            System.out.println("Course: " + courseName);
+            System.out.print("Prereqs: ");
             for (int i = 0;i<fullData.size();i++) {
-                System.out.print(courseName + ": ");
                 getPrereqs(fullData.get(i));
             }
 
@@ -69,6 +70,13 @@ public class Main{
         Document doc = u.doc;
         String courseDesc = doc.findFirst("<span id=sectionDetails_lblDescription").innerHTML();
         int start = courseDesc.indexOf("Recommended Course Background: ");
-        System.out.println(courseDesc.substring(start+31));
+        courseDesc = courseDesc.substring(start+31);
+
+        Pattern p = Pattern.compile("(AS|EN).[0-9]{3}.[0-9]{3}");
+        Matcher m = p.matcher(courseDesc);
+
+        while (m.find()) {
+            System.out.print(m.group(0) + " ");
+        }
     }
 }
