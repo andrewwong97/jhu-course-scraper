@@ -11,30 +11,42 @@ import java.util.regex.*;
 
 public class CourseScraper{
 
-    public static void main(String[] args) {
-        createCourseDB("EN.600.463");
+    /**
+     * Create HashMap and print all EN courses and their prerequisites.
+     * @param args
+     */
+    public static void main(String[] args) throws ResponseException, NotFound {
+        ArrayList<String> rawData = new ArrayList<>();
+        rawData.add("EN.600.463");
+        rawData.add("EN.600.226");
+        rawData.add("EN.600.120");
+        Map<String, ArrayList<String>> MainMap = new HashMap();
+        MainMap = createCourseDB(rawData);
+        for (String key : MainMap.keySet()) {
+            System.out.println(key + " " + MainMap.get(key));
+        }
     }
 
     /**
      * Creates a map of each course and its prerequisite courses
-     * @param courseName e.g. EN.600.463
+     * @param courseNames ArrayList of all the courses
      */
-    private static void createCourseDB(String courseName) {
-        try{
-            Map<String,ArrayList<String>> MainMap = new HashMap();
-
-            ArrayList<String> allIDs = retrieveIDs(courseName);
-
-
-            for (int i = 0;i<allIDs.size();i++) {
-                MainMap.put(courseName,getPrereqs(allIDs.get(i)));
+    private static Map createCourseDB(ArrayList<String> courseNames) {
+        try {
+            Map<String, ArrayList<String>> MainMap = new HashMap();
+            for (int i = 0; i < courseNames.size(); i++) {
+                String course = courseNames.get(i);
+                ArrayList<String> prereqIDs = retrieveIDs(course);
+                for (int j = 0; j < prereqIDs.size(); j++) {
+                    MainMap.put(course, getPrereqs(prereqIDs.get(j)));
+                }
             }
-            System.out.println(MainMap.get(courseName));
+            return MainMap;
 
-        }
-        catch(JauntException e){
+        } catch(JauntException e){
             System.out.println(e);
         }
+        return new HashMap();
     }
 
     /**
@@ -59,8 +71,8 @@ public class CourseScraper{
         Elements odd_trs = doc.findEach("<table>").findEach("<td>").findEach("<tr class=odd>");
         Elements even_trs = doc.findEach("<table>").findEach("<td>").findEach("<tr class=even>");
 
-        ArrayList<String> allIDs = getIdNums(odd_trs);
-        allIDs.addAll(getIdNums(even_trs));
+        ArrayList<String> allIDs = getIDNums(odd_trs);
+        allIDs.addAll(getIDNums(even_trs));
         return allIDs;
     }
 
@@ -69,7 +81,7 @@ public class CourseScraper{
      * @param list list of unstructured table rows
      * @return array of IDs
      */
-    private static ArrayList getIdNums(Elements list) {
+    private static ArrayList getIDNums(Elements list) {
         ArrayList<String> IDs = new ArrayList<String>();
         for (Element td : list) {
             String idBlock = null;
